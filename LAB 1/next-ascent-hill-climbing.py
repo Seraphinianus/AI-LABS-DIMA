@@ -1,8 +1,25 @@
 import csv
 import random
 
-filename="knapsack-100-items.csv"
-weight_limit=200
+files=["rucsac-20.csv", "rucsac-200.csv"]
+
+try:
+    filename = input("(0 for default 20-item knapsack)\n"+
+                    "(1 for default 200-item knapsack)\n"+
+                    "(Any other CSV dataset in the same directory)\n"+
+                    "Filename : ")
+except ValueError:
+    print("Input can only be: 0, 1 or a non-empty filename")
+    
+
+if (filename == "0"): 
+    filename=files[0] 
+    weight_limit = 524
+else:
+    if (filename == "1"): 
+        filename=files[1]
+        weight_limit = 112648
+
 runs=100
 
 # Declaring the filename manually
@@ -14,6 +31,7 @@ runs=100
 with open(filename, newline='') as csvfile:
     data_reader = csv.reader(csvfile, delimiter=',')
     next(data_reader) # skips header row
+    next(data_reader)
     data = [(int(row[0]), int(row[1])) for row in data_reader]
 
 # Declaring the weight limit and runs manually inputted
@@ -68,7 +86,21 @@ def compute_average(values):
         return 0
     return sum(values) / len(values)
 
-# runs = 100
+
+# Logging into file part
+#======================================================================
+logfilename = f"log_{filename}_weight-{weight_limit}_{runs}runs.txt"
+
+
+def log_message(msg, logfilename):
+    with open(logfilename, 'a') as logger:
+            logger.write(msg)
+            if msg == "":
+                logger.truncate(0)
+                
+log_message("", logfilename) # For clearing the logging file before writing to it
+
+#======================================================================
 
 print(f"Runs: {runs}")
 print("---------------------------------------------------------------------------------\n")
@@ -99,30 +131,40 @@ for run in range(runs):
     # Check if the best solution found in the run is valid
     if evaluate(current_solution) < 0:
         msg1 = f"Run {run+1}: Best solution is not valid"
-        with open(f"log_{filename}_weight-{weight_limit}_{runs}runs.txt", 'a') as logger:
-            logger.write(msg1+"\n")
+        log_message(msg1+"\n", logfilename)
+        #with open(f"log_{filename}_weight-{weight_limit}_{runs}runs.txt", 'a') as logger:
+        #    logger.write(msg1+"\n")
         print(msg1)
     else:
         msg2 = f"Run {run+1}: Weight = {evaluate_weight(current_solution)}/{weight_limit}, Value = {evaluate(current_solution)} Solution = {current_solution}"
-        with open(f"log_{filename}_weight-{weight_limit}_{runs}runs.txt", 'a') as logger:
-            logger.write(msg2+"\n")
+        log_message(msg2+"\n", logfilename)
+        #with open(f"log_{filename}_weight-{weight_limit}_{runs}runs.txt", 'a') as logger:
+        #    logger.write(msg2+"\n")
         print(msg2)
     
 
-msg_breaker = "---------------------------------------------------------------------------------\n"
-with open(f"log_{filename}_weight-{weight_limit}_{runs}runs.txt", 'a') as logger:
-            logger.write(msg_breaker+"\n")
-print(msg_breaker)
+# Logging the remaining details about the runs, such as BEST solution, total average for all valid solution in the runs,
+# number of runs and weight limit assigned
+
+msg_breaker = "\n-------------------------------------------------------------------------------------------------------------------------------\n"
+log_message(msg_breaker, logfilename)
+#with open(f"log_{filename}_weight-{weight_limit}_{runs}runs.txt", 'a') as logger:
+#            logger.write(msg_breaker+"\n")
+print(msg_breaker) 
 msg3 = f"BEST SOLUTION: Weight = {evaluate_weight(best_solution)}/{weight_limit}, Value = {evaluate(best_solution)} Solution = {best_solution}"
-with open(f"log_{filename}_weight-{weight_limit}_{runs}runs.txt", 'a') as logger:
-            logger.write(msg3+"\n")
+log_message(msg3, logfilename)
+#with open(f"log_{filename}_weight-{weight_limit}_{runs}runs.txt", 'a') as logger:
+#            logger.write(msg3+"\n")
 print(msg3)
+log_message(msg_breaker+"\n", logfilename)
 print(msg_breaker)
 msg4 = f"Average total value: {compute_average(values)}"
-with open(f"log_{filename}_weight-{weight_limit}_{runs}runs.txt", 'a') as logger:
-            logger.write(msg4+"\n")
+#with open(f"log_{filename}_weight-{weight_limit}_{runs}runs.txt", 'a') as logger:
+#            logger.write(msg4+"\n")
+log_message(msg4, logfilename)
 print(msg4)
-with open(f"log_{filename}_weight-{weight_limit}_{runs}runs.txt", 'a') as logger:
-            logger.write("\n"+"Runs:"+str(runs)+"\n"+"Weight:"+str(weight_limit))
+#with open(f"log_{filename}_weight-{weight_limit}_{runs}runs.txt", 'a') as logger:
+#            logger.write("\n"+"Runs:"+str(runs)+"\n"+"Weight:"+str(weight_limit))
+log_message("\n"+"Runs:"+str(runs)+"\n"+"Weight limit:"+str(weight_limit), logfilename)
 
 #print(values)
