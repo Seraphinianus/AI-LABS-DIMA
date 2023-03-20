@@ -20,7 +20,7 @@ else:
         filename=files[1]
         weight_limit = 112648
 
-runs=100
+runs=1000
 
 # Declaring the filename manually
 
@@ -168,3 +168,19 @@ print(msg4)
 log_message("\n"+"Runs:"+str(runs)+"\n"+"Weight limit:"+str(weight_limit), logfilename)
 
 #print(values)
+
+# Master Logger:
+# This file is going to be dedicated to logging the assignment's purpose. That would be an average of atleast 10 runs of the algorithm.
+# I will be doing this manually, getting the BEST solutions in 10 runs, specifying the amount of runs in every simulation,
+# along with their average value, worst BEST value and Overall averages for each of the runs.
+#
+# The runs are going to be configured as follows: 
+# First part: 20-item knapsack.
+# -> 10 runs
+# -> 1k runs
+# -> 100k runs
+# Second part: 200-item knapsack.
+# -> 10 runs
+# -> 1k runs
+# -> 100k runs
+#
