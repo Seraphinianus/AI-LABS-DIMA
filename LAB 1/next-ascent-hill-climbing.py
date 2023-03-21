@@ -1,8 +1,10 @@
 import csv
 import random
 
+# Hard coding the files for this assignment.
 files=["rucsac-20.csv", "rucsac-200.csv"]
 
+# Taking input for the dataset
 try:
     filename = input("(0 for default 20-item knapsack)\n"+
                     "(1 for default 200-item knapsack)\n"+
@@ -19,7 +21,12 @@ else:
     if (filename == "1"): 
         filename=files[1]
         weight_limit = 112648
+    else:
+        weight_limit = int(input("What's the weight limit? (-1 for default) (default: 100): "))
 
+#runs = int(input("How many runs? (-1 for default) (default: 10): "))
+
+# I know it's a bit rudimentary, but hard coded run number
 runs=1000
 
 # Declaring the filename manually
@@ -34,14 +41,17 @@ with open(filename, newline='') as csvfile:
     next(data_reader)
     data = [(int(row[0]), int(row[1])) for row in data_reader]
 
+#-----------------------------------------------------------------
 # Declaring the weight limit and runs manually inputted
 
 #weight_limit = int(input("What's the weight limit? (-1 for default) (default: 100): "))
 #if weight_limit < 0: weight_limit = 100
 #runs = int(input("How many runs? (-1 for default) (default: 10): "))
 #if runs < 0: runs = 10
+#-----------------------------------------------------------------
 
-# Define function to evaluate a solution
+
+# Define function to evaluate a solution (fitness)
 def evaluate(solution):
     total_value = 0
     total_weight = 0
@@ -54,21 +64,19 @@ def evaluate(solution):
     else:
         return total_value
 
+# Evaluating the weight of the solution
 def evaluate_weight(solution):
-    total_value = 0
     total_weight = 0
     for i in range(len(solution)):
         if solution[i] == 1:
-            total_value += data[i][0]
             total_weight += data[i][1]
-    
     return total_weight
 
-# Define function to generate a random solution
+# Generating a random solution
 def generate_random_solution():
     return [random.randint(0, 1) for _ in range(len(data))]
 
-# Define function to find the next steepest neighbor
+# Function for next steepest neighbour
 def find_next_steepest_neighbor(solution, current_value):
     best_value = current_value
     best_neighbor = None
@@ -81,16 +89,16 @@ def find_next_steepest_neighbor(solution, current_value):
             best_neighbor = neighbor
     return best_neighbor, best_value
 
+# Function for getting the overall average of the runs
 def compute_average(values):
     if not values:
         return 0
     return sum(values) / len(values)
 
 
-# Logging into file part
+# Logging into a file 
 #======================================================================
 logfilename = f"log_{filename}_weight-{weight_limit}_{runs}runs.txt"
-
 
 def log_message(msg, logfilename):
     with open(logfilename, 'a') as logger:
@@ -102,12 +110,14 @@ log_message("", logfilename) # For clearing the logging file before writing to i
 
 #======================================================================
 
+# Some output formatting and declaring initial state of those variables
 print(f"Runs: {runs}")
 print("---------------------------------------------------------------------------------\n")
 values = []
 best_solution = []
 
-# Perform 100 runs of the algorithm
+
+# Perform {runs} runs of the algorithm
 for run in range(runs):
     # Generate a random initial solution
     current_solution = generate_random_solution()
@@ -125,8 +135,13 @@ for run in range(runs):
         # Otherwise, move to the next solution
         current_solution = next_solution
         current_value = next_value
+        
+        # Getting the BEST solution out of all the runs
         if (current_value > evaluate(best_solution)):best_solution = current_solution
+        
+        # This is for the overall average 
         if(current_value > 0):values.append(current_value)
+    
     
     # Check if the best solution found in the run is valid
     if evaluate(current_solution) < 0:
@@ -183,4 +198,3 @@ log_message("\n"+"Runs:"+str(runs)+"\n"+"Weight limit:"+str(weight_limit), logfi
 # -> 10 runs
 # -> 1k runs
 # -> 100k runs
-#
