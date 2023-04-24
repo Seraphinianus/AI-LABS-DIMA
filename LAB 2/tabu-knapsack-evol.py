@@ -9,8 +9,8 @@ def start():
     data = read_data(f)
 
     n_exp = 10
-    n = 1000
-    k = 10
+    n = 10
+    k = 100
 
     print(f"{n_exp} experiments ran.")
     print(f"With {n} iterations.")
