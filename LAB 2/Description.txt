@@ -1,0 +1,43 @@
+Knapsack with tabu search:
+
+Sure! Here's a brief description of each method in the program:
+
+- `start()`: This is the main function that runs the program. It prompts the user to input a filename, reads in the data from the file, and then runs the algorithm on the data multiple times (specified by `n_exp`). It also prints out some information about the experiment and the best solution found.
+
+- `read_data(file)`: This method reads in the data from a file and returns a tuple containing the data and the maximum weight.
+
+- `run(n, k, data, max)`: This is the main algorithm for finding the best solution. It starts with a randomly generated valid solution, and then iteratively searches for better solutions by generating and evaluating neighboring solutions. It maintains a tabu list to prevent cycling and ensures that the solutions are valid. The method returns the best solution found.
+
+- `generate_neighbours_of_solution(solution, data, max)`: This method generates all valid neighboring solutions to the given solution by flipping one bit at a time. It returns a list of all valid neighbors.
+
+- `generate_random_valid_solution(data, max)`: This method generates a random valid solution by randomly selecting a 0 or 1 for each item in the data until a valid solution is found. It returns the valid solution.
+
+- `is_valid(weight, max)`: This method checks if a given weight is less than or equal to the maximum weight. It returns a boolean indicating whether the weight is valid or not.
+
+- `total_weight(solution, data)`: This method calculates the total weight of a solution by summing the weights of all selected items in the solution. It returns the total weight.
+
+- `total_value(solution, data)`: This method calculates the total value of a solution by summing the values of all selected items in the solution. It returns the total value.
+
+- `string_solution(solution, weight, quality, max)`: This method formats and returns a string representing a solution, including the solution itself, its quality (total value), its weight, and the maximum weight.
+
+Overall, this program implements a heuristic algorithm for solving the 0-1 Knapsack Problem, which involves selecting a subset of items to maximize their total value while staying under a certain weight limit. The algorithm uses a tabu search method to explore the solution space and maintain diversity.
+
+TSP problem with tabu search:
+
+Sure, here's an explanation of each method in the program:
+
+1. `start()`: This is the main function that starts the program. It first prompts the user to enter a filename, then reads the data from that file using the `read_data()` method. It then runs `n_exp` experiments, each consisting of running the `run()` method `n` times with `k` iterations per run, and stores the best solution from each experiment. Finally, it prints out the best solution and the average distance of all the solutions.
+
+2. `read_data(file)`: This method reads the data from the given file and returns it as a list of tuples. It skips the first 6 lines of the file, then reads each line until it reaches "EOF". Each line is stripped of whitespace and converted into a tuple of integers.
+
+3. `run(n, k, data)`: This method runs the Tabu Search algorithm for `n` iterations with `k` iterations in the Tabu list. It starts by generating a random solution and setting it as the best and current candidate solution. It then generates all neighbours of the current solution and finds the best non-Tabu neighbour, i.e., the neighbour that has the lowest distance to the target solution and is not already in the Tabu list. It updates the best solution if the current candidate solution is better than the current best solution. It also updates the Tabu list and removes any solutions that have been there for `k` iterations. Finally, it returns the best solution found.
+
+4. `generate_random_solution(data)`: This method generates a random solution by shuffling the list of nodes in `data`.
+
+5. `generate_neighbours_of_solution(solution, data)`: This method generates all neighbours of a given solution by swapping two nodes at a time.
+
+6. `distance(solution, data)`: This method calculates the distance of a solution by summing the distances between all adjacent nodes in the solution using the `distance_between()` method.
+
+7. `distance_between(A, B, data)`: This method calculates the Euclidean distance between two nodes A and B in the graph, given their coordinates in the `data` list.
+
+8. `string_solution(solution, distance)`: This method returns a string representation of a solution and its distance in the format "{solution} - distance: {distance}".
